@@ -1,0 +1,22 @@
+replicaCount: 1
+
+image:
+  repository: sudolicious1/todolist-backend
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 8080
+
+env:
+  HOST: "0.0.0.0"
+  PORT: "8080"
+  DB_HOST: "postgres-postgresql.default.svc.cluster.local"
+  DB_PORT: "5432"
+  DB_USER: "postgres"
+  DB_NAME: "todolist"
+
+resources: {}
+
+postgresql:
+  existingSecret: "postgres-secret"

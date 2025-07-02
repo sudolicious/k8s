@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: {{ .Values.image.repository }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: 8080
+        env:
+        - name: HOST
+          value: {{ .Values.env.HOST | quote }}
+        - name: PORT
+          value: {{ .Values.env.PORT | quote }}
+        - name: DB_HOST
+          value: {{ .Values.env.DB_HOST | quote }}
+        - name: DB_PORT
+          value: {{ .Values.env.DB_PORT | quote }}
+        - name: DB_USER
+          value: {{ .Values.env.DB_USER | quote }}
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.postgresql.existingSecret }}
+              key: POSTGRES_PASSWORD
+        - name: DB_NAME
+          value: {{ .Values.env.DB_NAME | quote }}
