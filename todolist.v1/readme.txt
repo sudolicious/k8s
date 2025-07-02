@@ -29,7 +29,7 @@
    # Дождитесь перехода pod в статус Running:
    kubectl get pods -A
 
-   Бэкэнд: http://localhost:30007/api/tasks
+   Бэкэнд: http://<node-ip>:30007/api/tasks
    
 6. Запуск фронтэнда
 
@@ -38,4 +38,4 @@
    # Дождитесь перехода pod в статус Running:
    kubectl get pods -A
 
-   Фронтэнд: http://localhost:30007
+   Фронтэнд: http://<node-ip>:30007
