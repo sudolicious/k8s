@@ -18,7 +18,7 @@
    sudo chown -R 1001:1001 /mnt/data/postgres
 
 5. Создание секрета с паролем
-   kubectl create secret generic postgres-secret   --from-literal=POSTGRES_PASSWORD=yoursecretpassword
+   kubectl create secret generic postgres-secret   --from-literal=POSTGRES_PASSWORD=your_password
 
 6. Установка PostgreSQL
    helm install postgres bitnami/postgresql -f postgres/values.yaml
