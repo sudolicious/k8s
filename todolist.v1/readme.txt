@@ -1,27 +1,33 @@
-Предварительные требования
-   - Установленный Kubernetes кластер
-   - Доступ к кластеру через kubectl
+Kubernetes Deployment for ToDolist Application
 
-1. Клонирование репозитория   
-   git clone https://github.com/sudolicious/k8s/todolist.v1
+Requirements:
+- Installed Kubernetes cluster
+- Access to the cluster via kubectl
 
-2. Настройка хранилища (для bare-metal). На каждой ноде создайте директорию:   
+1. Clone the repository
+   git clone https://github.com/sudolicious/k8s
+   cd todolist.v1
+
+2. Storage setup (for bare-metal). On each node create directory:
    sudo mkdir -p /mnt/data/postgres
    sudo chown -R 1001:1001 /mnt/data/postgres
 
-3. Создание секрета с паролем   
-   kubectl create secret generic postgres-secret   --from literal=POSTGRES_PASSWORD=your_password
+3. Create password secret
+   kubectl create secret generic postgres-secret --from-literal=POSTGRES_PASSWORD=your_password
 
-4. Установка PostgreSQL
+4. Install PostgreSQL
    kubectl apply -f ./postgres
 
-5. Запуск бэкэнда
+5. Start backend
    kubectl apply -f ./backend
-   Бэкэнд: http://<node-ip>:30007/api/tasks
    
-6. Запуск фронтэнда
-   kubectl apply -f ./frontend
-   Фронтэнд: http://<node-ip>:30007
+   Backend: http://<node-ip>:30007/api/tasks
 
-7. Проверка подов: 
+6. Start frontend
+   kubectl apply -f ./frontend
+   
+   Frontend: http://<node-ip>:30007
+
+7. Check pods:
    kubectl get po -A
+   
