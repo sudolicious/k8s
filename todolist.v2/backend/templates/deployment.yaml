@@ -1,38 +1,34 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Chart.Name }}
+  name: {{ include "backend.fullname" . }}
+  labels:
+    {{- include "backend.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Chart.Name }}
+      {{- include "backend.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: {{ .Chart.Name }}
+        {{- include "backend.selectorLabels" . | nindent 8 }}
     spec:
       containers:
-      - name: {{ .Chart.Name }}
-        image: {{ .Values.image.repository }}
+      - name: {{ include "backend.name" . }} 
+        image: "{{ .Values.image.repository }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
-        - containerPort: 8080
+        - containerPort: {{ .Values.container.port }}
         env:
-        - name: HOST
-          value: {{ .Values.env.HOST | quote }}
-        - name: PORT
-          value: {{ .Values.env.PORT | quote }}
-        - name: DB_HOST
-          value: {{ .Values.env.DB_HOST | quote }}
-        - name: DB_PORT
-          value: {{ .Values.env.DB_PORT | quote }}
-        - name: DB_USER
-          value: {{ .Values.env.DB_USER | quote }}
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Values.postgresql.existingSecret }}
-              key: POSTGRES_PASSWORD
-        - name: DB_NAME
-          value: {{ .Values.env.DB_NAME | quote }}
+          {{- if .Values.postgresql.existingSecret }}
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.postgresql.existingSecret }}
+                key: POSTGRES_PASSWORD
+          {{- end }}
+          {{- range .Values.env }}
+          - name: {{ .name }}
+            value: {{ .value | quote }}
+          {{- end }}

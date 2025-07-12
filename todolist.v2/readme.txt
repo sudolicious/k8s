@@ -1,39 +1,35 @@
-Kubernetes Deployment for ToDolist Application with Helm
+Предварительные требования
+   - Установленный Kubernetes кластер
+   - Установленный Helm (версии 3.x)
+   - Доступ к кластеру через kubectl
 
-Prerequisites
-   - Installed Kubernetes cluster
-   - Installed Helm (version 3.x)
-   - Access to the cluster via kubectl
-
-1. Clone the repository
+1. Клонирование репозитория
    git clone https://github.com/sudolicious/k8s/todolist.v2
 
-2. Add Bitnami repository
+2. Добавление репозитория Bitnami
    helm repo add bitnami https://charts.bitnami.com/bitnami
    helm repo update
 
-3. Install local path provisioner (for bare-metal)
+3. Установите local path provisioner (для bare-metal)
    kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.24/deploy/local-path-storage.yaml
-
-4. Storage setup (for bare-metal). On each node create directory:
+   
+4. Настройка хранилища (для bare-metal). На каждой ноде создайте директорию:   
    sudo mkdir -p /mnt/data/postgres
    sudo chown -R 1001:1001 /mnt/data/postgres
 
-5. Create password secret
-   kubectl create secret generic postgres-secret --from-literal=POSTGRES_PASSWORD=your_password
+5. Создание секрета с паролем
+   kubectl create secret generic postgres-secret   --from-literal=POSTGRES_PASSWORD=yoursecretpassword
 
-6. Install PostgreSQL
+6. Установка PostgreSQL
    helm install postgres bitnami/postgresql -f postgres/values.yaml
 
-7. Start backend
+7. Запуск бэкэнда
    helm install backend ./backend
    
-   Backend: http://<node-ip>:30007/api/tasks
-
-8. Start frontend
+8. Запуск фронтэнда
    helm install frontend ./frontend
 
-Check pods:
+Проверка подов: 
    kubectl get po -A
 
-Application access: http://<node-ip>:30007
+Доступ к приложению: http://<node-ip>:30007

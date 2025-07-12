@@ -7,14 +7,24 @@ image:
 service:
   type: ClusterIP
   port: 8080
+  targetPort: 8080
+
+container:
+  port: 8080
 
 env:
-  HOST: "0.0.0.0"
-  PORT: "8080"
-  DB_HOST: "postgres-postgresql.default.svc.cluster.local"
-  DB_PORT: "5432"
-  DB_USER: "postgres"
-  DB_NAME: "todolist"
+  - name: HOST
+    value: "0.0.0.0"
+  - name: PORT
+    value: "8080"
+  - name: DB_HOST
+    value: "postgres-postgresql"
+  - name: DB_PORT
+    value: "5432"
+  - name: DB_USER
+    value: "postgres"
+  - name: DB_NAME
+    value: "todolist"
 
 resources: {}
 
