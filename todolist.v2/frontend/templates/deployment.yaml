@@ -15,7 +15,7 @@ spec:
         {{- include "frontend.selectorLabels" . | nindent 8 }}
     spec:
       containers:
-      - name: {{ include "frontend.name" . }}  # Исправлено с .Chart.Name на хелпер
+      - name: {{ include "frontend.name" . }}
         image: "{{ .Values.image.repository }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:

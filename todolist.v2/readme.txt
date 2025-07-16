@@ -1,4 +1,6 @@
-Kubernetes Deployment for ToDolist Application
+Kubernetes Deployment for ToDolist Application 
+
+Application is served via http://altenar-intership-2025.com
 
 Requirements:
 - Installed Kubernetes cluster
@@ -29,12 +31,13 @@ Requirements:
 7. Start backend
    helm install backend ./backend
    
-   Backend: http://<node-ip>:30007/api/tasks
+   Backend: http://altenar-internship-2025.com/api/tasks
 
 8. Start frontend
    helm install frontend ./frontend
 
-Application access: http://<node-ip>:30007
+Application access: http://altenar-internship-2025.com
 
 9. Check pods:
    kubectl get po -A
+

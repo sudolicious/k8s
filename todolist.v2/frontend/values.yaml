@@ -5,9 +5,17 @@ image:
   pullPolicy: Always
 
 service:
-  type: NodePort
+  type: ClusterIP
   port: 80
-  nodePort: 30007
+  
+ingress:
+  enabled: true
+  className: "nginx"
+  hosts:
+    - host: "altenar-internship-2025.com"
+      paths:
+        - path: /
+          pathType: Prefix
 
 backend:
   serviceName: "backend"
