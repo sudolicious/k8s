@@ -15,7 +15,9 @@ ingress:
     - host: "altenar-internship-2025.com"
       paths:
         - path: /
-          pathType: Prefixыы
+          pathType: Prefix
+        - path: /api
+          pathType: Prefix
 
 backend:
   serviceName: "backend"

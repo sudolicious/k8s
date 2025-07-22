@@ -27,7 +27,7 @@ spec:
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: {{ .Values.postgresql.existingSecret }}
-              key: POSTGRES_PASSWORD
+              name: {{ .Values.externalDatabase.existingSecret | quote }}
+              key: {{ .Values.externalDatabase.existingSecretPasswordKey | quote }}
         resources:
           {{- toYaml .Values.resources | nindent 10 }}

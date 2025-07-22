@@ -1,6 +1,6 @@
-Kubernetes Deployment for ToDolist Application
+Kubernetes Deployment for ToDolist Application (External DataBase Postgres)
 
-Application is served via http://altenar-intership-2025.com
+Application is served via http://altenar-intership-2025.com (used Nginx Controller and MetalLB)
 
 Requirements:
 - Installed Kubernetes cluster

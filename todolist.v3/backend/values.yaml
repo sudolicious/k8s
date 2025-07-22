@@ -13,13 +13,16 @@ config:
   host: "0.0.0.0"
   port: "8080"
   debug: "false"
-  db:
-    host: "postgres-postgresql"
-    port: "5432"
-    name: "todolist"
-    user: "postgres"
 
 resources: {}
 
 postgresql:
+  enabled: false
+  
+externalDatabase:
+  host: "192.168.1.180"
+  port: "5432"
+  database: "dbgo"
+  user: "postgres"
   existingSecret: "postgres-secret"
+  existingSecretPasswordKey: "POSTGRES_PASSWORD"
