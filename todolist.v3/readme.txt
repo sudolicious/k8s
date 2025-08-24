@@ -18,25 +18,21 @@ Requirements:
 3. Install local path provisioner (for bare-metal)
    kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.24/deploy/local-path-storage.yaml
 
-4. Storage setup (for bare-metal). Create directory on each node:
-   sudo mkdir -p /mnt/data/postgres
-   sudo chown -R 1001:1001 /mnt/data/postgres
-
-5. Create password secret
+4. Create password secret
    kubectl create secret generic postgres-secret --from-literal=POSTGRES_PASSWORD=yoursecretpassword
 
-6. Install PostgreSQL
+5. Install PostgreSQL
    helm install postgres bitnami/postgresql -f postgres/values.yaml
 
-7. Start backend
+6. Start backend
    helm install backend ./backend
    
    Backend: http://altenar-internship-2025.com/api/tasks
 
-8. Start frontend
+7. Start frontend
    helm install frontend ./frontend
 
 Application access: http://altenar-internship-2025.com
 
-9. Check pods:
+How to check pods:
    kubectl get po -A
