@@ -9,7 +9,7 @@ Requirements:
 
 1. Clone the repository
    git clone https://github.com/sudolicious/k8s
-   cd todolist.v2
+   k8s/todolist.v2
 
 2. Add Bitnami repository
    helm repo add bitnami https://charts.bitnami.com/bitnami
