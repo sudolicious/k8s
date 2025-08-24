@@ -19,3 +19,10 @@ spec:
             name: {{ include "frontend.fullname" . }}
             port:
               number: {{ $.Values.service.port }}
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Values.backend.serviceName }}
+            port: 
+              number: {{ .Values.backend.servicePort }}

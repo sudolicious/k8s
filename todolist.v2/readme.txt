@@ -1,6 +1,6 @@
-Kubernetes Deployment for ToDolist Application
+Kubernetes Deployment for ToDolist Application with Helm
 
-Application is served via http://altenar-intership-2025.com
+Application is served via http://altenar-intership-2025.com (used Nginx Controller and MetalLB)
 
 Requirements:
 - Installed Kubernetes cluster
@@ -18,9 +18,7 @@ Requirements:
 3. Install local path provisioner (for bare-metal)
    kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.24/deploy/local-path-storage.yaml
 
-4. Storage setup (for bare-metal). Create directory on each node:
-   sudo mkdir -p /mnt/data/postgres
-   sudo chown -R 1001:1001 /mnt/data/postgres
+4. Install Nginx Controller and MetalLB
 
 5. Create password secret
    kubectl create secret generic postgres-secret --from-literal=POSTGRES_PASSWORD=yoursecretpassword
