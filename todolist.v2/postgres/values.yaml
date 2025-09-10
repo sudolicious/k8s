@@ -6,7 +6,7 @@ global:
       existingSecret: postgres-secret
       secretKeys:
         adminPasswordKey: POSTGRES_PASSWORD
-        userPasswordKey: POSTGRES_PASSWORD 
+        userPasswordKey: POSTGRES_PASSWORD
 
 primary:
   persistence:
@@ -17,3 +17,17 @@ primary:
     requests:
       memory: "512Mi"
       cpu: "250m"
+
+podAnnotations:
+  vault.hashicorp.com/agent-inject: "true"
+  vault.hashicorp.com/role: "backend"
+  vault.hashicorp.com/agent-inject-secret-db-creds.env: "kv-v2/data/database/postgres"
+  vault.hashicorp.com/agent-inject-template-db-creds.env: |
+    {{`{{- with secret "kv-v2/data/database/postgres" -}}
+    DB_PASSWORD={{ .Data.data.password }}
+    DB_HOST={{ .Data.data.host }}
+    DB_PORT={{ .Data.data.port }}
+    DB_NAME={{ .Data.data.database }}
+    DB_USER={{ .Data.data.user }}
+    {{- end }}`}}
+

@@ -1,33 +1,41 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "backend.fullname" . }}
+  name: backend
+  namespace: default
   labels:
-    {{- include "backend.labels" . | nindent 4 }}
+    {{- include "backend.labels" . | nindent 8 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "backend.selectorLabels" . | nindent 6 }}
+      app: backend
   template:
     metadata:
       labels:
-        {{- include "backend.selectorLabels" . | nindent 8 }}
+        app: backend
+      annotations:
+        vault.hashicorp.com/agent-inject: "{{ .Values.vault.enabled }}"
+        vault.hashicorp.com/agent-init-only: "true"
+        vault.hashicorp.com/auth-path: {{ .Values.vault.authPath | default "kubernetes" }}
+        vault.hashicorp.com/role: "{{ .Values.vault.role }}"
+        vault.hashicorp.com/agent-inject-secret-db-creds: "{{ .Values.vault.secretPath }}"
+        vault.hashicorp.com/agent-inject-template-db-creds: |
+          {{ .Values.vault.agentInjectTemplate | nindent 10 }}
+        {{- with .Values.annotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
+      serviceAccountName: {{ .Values.vault.serviceAccount }}
       containers:
-      - name: {{ include "backend.name" . }}
+      - name: backend
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
-        - containerPort: {{ .Values.service.port }}
-        envFrom:
-        - configMapRef:
-            name: {{ include "backend.fullname" . }}-config
-        env:
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Values.externalDatabase.existingSecret | quote }}
-              key: {{ .Values.externalDatabase.existingSecretPasswordKey | quote }}
+        - name: http
+          containerPort: {{ .Values.service.port }}
+        - name: metrics
+          containerPort: 9090
+        command: ["/bin/sh", "-c", "sleep 5 && . /vault/secrets/db-creds && exec ./todolist-app"]
         resources:
           {{- toYaml .Values.resources | nindent 10 }}

@@ -1,0 +1,34 @@
+server:
+  ha:
+    enabled: true
+    replicas: 1
+    raft:
+      enabled: true
+
+  persistence:
+    enabled: true
+    storageClass: local-path
+    size: 1Gi
+
+  extraEnvironmentVars:
+    VAULT_LOCAL_CONFIG: |
+      listener "tcp" {
+        address = "0.0.0.0:8200"
+        tls_disable = 1
+      }
+      storage "raft" {
+        path = "/bitnami/vault/data"
+      }
+      ui = true
+
+injector:
+  enabled: true
+  externalVaultAddr: "http://vault.vault:8200"
+
+  livenessProbe:
+    enabled: false
+  readinessProbe:
+    enabled: false
+  startupProbe:
+    enabled: false
+

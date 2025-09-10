@@ -2,13 +2,43 @@ replicaCount: 1
 
 image:
   repository: sudolicious1/todolist-backend
-  tag: "1.0.1"
+  tag: "latest"
   pullPolicy: Always
 
 service:
   type: ClusterIP
   port: 8080
   targetPort: 8080
+  name: http
+  protocol: TCP
+
+labels:
+  app: backend
+  app.kubernetes.io/name: backend
+  app.kubernetes.io/instance: backend
+
+selector:
+  app: backend
+
+annotations:
+  prometheus.io/scrape: "true"
+  prometheus.io/port: "8080"
+  prometheus.io/path: "/metrics"
+
+vault:
+  enabled: true
+  addr: "http://vault.vault:8200"
+  role: "backend"
+  authPath: "auth/test-k8s" 
+  secretPath: "kv-v2/data/database/postgres"
+  serviceAccount: "vault-auth"
+  agentInjectTemplate: |
+    {{- with secret "kv-v2/data/database/postgres" -}}
+    DB_HOST="{{ .Data.data.host }}"
+    DB_USER="{{ .Data.data.user }}"
+    DB_NAME="{{ .Data.data.database }}"
+    DB_PASSWORD="{{ .Data.data.password }}"
+    {{- end }}
 
 config:
   host: "0.0.0.0"
@@ -17,13 +47,9 @@ config:
 
 resources: {}
 
-postgresql:
-  enabled: false
-  
 externalDatabase:
-  host: "192.168.1.180"
+  host: "postgres-postgresql"
   port: "5432"
-  database: "dbgo"
+  database: "todolist"
   user: "postgres"
-  existingSecret: "postgres-secret"
-  existingSecretPasswordKey: "POSTGRES_PASSWORD"
+
