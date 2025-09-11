@@ -32,6 +32,11 @@ vault:
   authPath: "auth/test-k8s" 
   secretPath: "kv-v2/data/database/postgres"
   serviceAccount: "vault-auth"
+  agentInjectTemplate: |
+    DB_HOST="{{ .Data.data.host }}"
+    DB_USER="{{ .Data.data.user }}"
+    DB_NAME="{{ .Data.data.database }}"
+    DB_PASSWORD="{{ .Data.data.password }}"
 
 config:
   host: "0.0.0.0"
