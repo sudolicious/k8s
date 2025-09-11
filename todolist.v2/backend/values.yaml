@@ -28,7 +28,7 @@ annotations:
 vault:
   enabled: true
   addr: "http://vault.vault:8200"
-  role: "backend"
+  role: "backend-policy"
   authPath: "auth/test-k8s" 
   secretPath: "kv-v2/data/database/postgres"
   serviceAccount: "vault-auth"
