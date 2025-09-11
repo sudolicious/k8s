@@ -21,7 +21,12 @@ spec:
         vault.hashicorp.com/role: "{{ .Values.vault.role }}"
         vault.hashicorp.com/agent-inject-secret-db-creds: "{{ .Values.vault.secretPath }}"
         vault.hashicorp.com/agent-inject-template-db-creds: |
-          {{ .Values.vault.agentInjectTemplate }}
+          {{- with secret "kv-v2/data/database/postgres" -}}
+          DB_HOST="{{ .Data.data.host }}"
+          DB_USER="{{ .Data.data.user }}"
+          DB_NAME="{{ .Data.data.database }}"
+          DB_PASSWORD="{{ .Data.data.password }}"
+          {{- end }}
         {{- if .Values.annotations }}
         {{- toYaml .Values.annotations | nindent 8 }}
         {{- end }}
