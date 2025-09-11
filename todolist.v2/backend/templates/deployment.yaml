@@ -4,7 +4,7 @@ metadata:
   name: backend
   namespace: default
   labels:
-    {{- include "backend.labels" . | nindent 8 }}
+{{- include "backend.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -15,18 +15,18 @@ spec:
       labels:
         app: backend
       annotations:
-        vault.hashicorp.com/agent-inject: "{{ .Values.vault.enabled }}"
+        vault.hashicorp.com/agent-inject: "{{ .Values.vault.enabled | quote }}"
         vault.hashicorp.com/agent-init-only: "true"
-        vault.hashicorp.com/auth-path: {{ .Values.vault.authPath | default "kubernetes" }}
-        vault.hashicorp.com/role: "{{ .Values.vault.role }}"
-        vault.hashicorp.com/agent-inject-secret-db-creds: "{{ .Values.vault.secretPath }}"
+        vault.hashicorp.com/auth-path: "{{ .Values.vault.authPath | quote }}"
+        vault.hashicorp.com/role: "{{ .Values.vault.role | quote }}"
+        vault.hashicorp.com/agent-inject-secret-db-creds: "{{ .Values.vault.secretPath | quote }}"
         vault.hashicorp.com/agent-inject-template-db-creds: |
-          {{ .Values.vault.agentInjectTemplate }}
-        {{- if .Values.annotations }}
-        {{- toYaml .Values.annotations | nindent 8 }}
-        {{- end }}
+{{ .Values.vault.agentInjectTemplate | indent 10 }}
+{{- if .Values.annotations }}
+{{ toYaml .Values.annotations | indent 8 }}
+{{- end }}
     spec:
-      serviceAccountName: {{ .Values.vault.serviceAccount }}
+      serviceAccountName: {{ .Values.vault.serviceAccount | quote }}
       containers:
       - name: backend
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -38,4 +38,5 @@ spec:
           containerPort: 9090
         command: ["/bin/sh", "-c", "sleep 5 && . /vault/secrets/db-creds && exec ./todolist-app"]
         resources:
-          {{- toYaml .Values.resources | nindent 10 }}
+{{- toYaml .Values.resources | nindent 10 }}
+
