@@ -21,7 +21,7 @@ spec:
         vault.hashicorp.com/role: "{{ .Values.vault.role }}"
         vault.hashicorp.com/agent-inject-secret-db-creds: "{{ .Values.vault.secretPath }}"
         vault.hashicorp.com/agent-inject-template-db-creds: |
-          {{ .Values.vault.agentInjectTemplate | nindent 10 }}
+          {{ .Values.vault.agentInjectTemplate | indent 10 }}
         {{- with .Values.annotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
