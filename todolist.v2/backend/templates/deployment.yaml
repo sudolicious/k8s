@@ -21,9 +21,9 @@ spec:
         vault.hashicorp.com/role: "{{ .Values.vault.role | quote }}"
         vault.hashicorp.com/agent-inject-secret-db-creds: "{{ .Values.vault.secretPath | quote }}"
         vault.hashicorp.com/agent-inject-template-db-creds: |
-{{ .Values.vault.agentInjectTemplate | indent 10 }}
+          {{ .Values.vault.agentInjectTemplate | indent 4 }}
 {{- if .Values.annotations }}
-{{ toYaml .Values.annotations | indent 8 }}
+{{ toYaml .Values.annotations | indent 4 }}
 {{- end }}
     spec:
       serviceAccountName: {{ .Values.vault.serviceAccount | quote }}
