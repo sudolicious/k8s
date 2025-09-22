@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: sudolicious1/todolist-backend
-  tag: "latest"
+  tag: "1.2.1"
   pullPolicy: Always
 
 service:
