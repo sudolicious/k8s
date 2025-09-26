@@ -1,0 +1,41 @@
+name: CD-$(Date:yyyyMMdd)-$(Rev:.r)
+
+trigger: none   # CD запускается вручную или из CI через pipeline resource
+
+resources:
+  pipelines:
+    - pipeline: todolist-ci   # имя CI пайплайна
+      source: sudolicious.todolist  # название CI pipeline в Azure DevOps
+      trigger: true           # автоматический запуск при успешном CI
+
+pool: Default
+
+stages:
+- stage: Deploy
+  displayName: "🚀 Deploy to Kubernetes"
+  jobs:
+  - job: HelmUpgrade
+    displayName: "Helm upgrade todolist"
+    steps:
+    - checkout: self
+      displayName: "Checkout repo with Helm chart"
+
+    - download: todolist-ci
+      artifact: version-info
+      displayName: "Download version info from CI"
+
+    - script: |
+        source $(Pipeline.Workspace)/version-info/version.env
+        echo "Deploying version: $APP_VERSION"
+
+        # Обновляем Helm release
+        helm upgrade todolist ./todolist.v2/backend \
+          --install \
+          --namespace todolist \
+          --create-namespace \
+          --set image.repository=$(imageName) \
+          --set image.tag=$APP_VERSION
+
+        echo "✅ Helm release updated: $APP_VERSION"
+      displayName: "Run helm upgrade"
+
